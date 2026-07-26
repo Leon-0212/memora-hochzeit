@@ -30,6 +30,7 @@ const next =
 document.getElementById("next");
 
 
+
 let images = [];
 
 let currentIndex = 0;
@@ -38,7 +39,9 @@ let currentIndex = 0;
 
 async function loadGallery(){
 
+
     try {
+
 
         const response =
         await fetch(
@@ -48,6 +51,7 @@ async function loadGallery(){
 
         const data =
         await response.json();
+
 
 
         if(!data.success){
@@ -60,8 +64,10 @@ async function loadGallery(){
         }
 
 
+
         const items =
         data.gallery;
+
 
 
         images =
@@ -70,21 +76,28 @@ async function loadGallery(){
         );
 
 
+
         renderGallery(
-            items.reverse()
+            items
         );
+
 
 
     } catch(error){
 
+
         console.error(error);
+
 
         gallery.innerHTML =
         "Galerie konnte nicht geladen werden.";
 
+
     }
 
+
 }
+
 
 
 
@@ -95,11 +108,14 @@ function renderGallery(items){
     gallery.innerHTML = "";
 
 
+
     items.forEach(item => {
+
 
 
         const card =
         document.createElement("div");
+
 
 
         card.className =
@@ -107,13 +123,28 @@ function renderGallery(items){
 
 
 
+        /*
+        VIDEO
+        */
+
+
         if(item.video){
+
 
 
             card.innerHTML = `
 
+
             <div class="video-card"
             onclick="openVideo('${item.driveId}')">
+
+
+
+                <img
+                class="video-thumbnail"
+                src="${item.thumbnail || ''}"
+                >
+
 
 
                 <div class="play-button">
@@ -121,40 +152,63 @@ function renderGallery(items){
                 </div>
 
 
+
             </div>
+
 
 
             <div class="uploader">
+
             Hochgeladen von ${item.uploader || "Gast"}
+
             </div>
+
 
             `;
 
 
-        } else {
+
+        }
+
+
+
+        /*
+        BILDER
+        */
+
+
+        else {
+
 
 
             card.innerHTML = `
 
-            <img 
+
+            <img
+            class="gallery-image"
             src="https://drive.google.com/thumbnail?id=${item.driveId}&sz=w1200"
             >
 
 
+
             <div class="uploader">
+
             Hochgeladen von ${item.uploader || "Gast"}
+
             </div>
+
 
             `;
 
 
+
             const image =
-            card.querySelector("img");
+            card.querySelector(".gallery-image");
 
 
 
-            image.onclick =
-            function(){
+            image.onclick = function(){
+
 
 
                 const index =
@@ -164,10 +218,12 @@ function renderGallery(items){
                 );
 
 
+
                 openLightbox(index);
 
 
             };
+
 
 
         }
@@ -175,6 +231,7 @@ function renderGallery(items){
 
 
         gallery.appendChild(card);
+
 
 
     });
@@ -185,16 +242,21 @@ function renderGallery(items){
 
 
 
+
 function openVideo(id){
 
 
+
     window.open(
+
         "https://drive.google.com/file/d/"
         +
         id
         +
         "/view",
+
         "_blank"
+
     );
 
 
@@ -203,14 +265,18 @@ function openVideo(id){
 
 
 
+
 function openLightbox(index){
+
 
 
     currentIndex =
     index;
 
 
+
     showImage();
+
 
 
     lightbox.style.display =
@@ -222,11 +288,14 @@ function openLightbox(index){
 
 
 
+
 function showImage(){
+
 
 
     const item =
     images[currentIndex];
+
 
 
     if(!item){
@@ -236,7 +305,9 @@ function showImage(){
     }
 
 
+
     lightboxImage.src =
+
     "https://drive.google.com/thumbnail?id="
     +
     item.driveId
@@ -245,10 +316,15 @@ function showImage(){
 
 
 
-    lightboxUploader.textContent =
-    "Hochgeladen von "
-    +
-    (item.uploader || "Gast");
+    if(lightboxUploader){
+
+        lightboxUploader.textContent =
+
+        "Hochgeladen von "
+        +
+        (item.uploader || "Gast");
+
+    }
 
 
 }
@@ -256,10 +332,13 @@ function showImage(){
 
 
 
+
 function showNext(){
 
 
+
     currentIndex++;
+
 
 
     if(currentIndex >= images.length){
@@ -269,9 +348,13 @@ function showNext(){
     }
 
 
+
     showImage();
 
+
+
 }
+
 
 
 
@@ -279,7 +362,9 @@ function showNext(){
 function showPrevious(){
 
 
+
     currentIndex--;
+
 
 
     if(currentIndex < 0){
@@ -290,44 +375,77 @@ function showPrevious(){
     }
 
 
+
     showImage();
+
+
 
 }
 
 
 
 
-close.onclick =
-function(){
 
-    lightbox.style.display =
-    "none";
-
-};
+if(close){
 
 
+    close.onclick =
+    function(){
 
 
-next.onclick =
-function(event){
+        lightbox.style.display =
+        "none";
 
-    event.stopPropagation();
 
-    showNext();
+    };
 
-};
+
+}
 
 
 
 
-prev.onclick =
-function(event){
 
-    event.stopPropagation();
+if(next){
 
-    showPrevious();
 
-};
+    next.onclick =
+    function(event){
+
+
+        event.stopPropagation();
+
+
+        showNext();
+
+
+    };
+
+
+}
+
+
+
+
+
+if(prev){
+
+
+    prev.onclick =
+    function(event){
+
+
+        event.stopPropagation();
+
+
+        showPrevious();
+
+
+    };
+
+
+}
+
 
 
 
@@ -335,12 +453,16 @@ function(event){
 lightbox.onclick =
 function(event){
 
+
     if(event.target === lightbox){
+
 
         lightbox.style.display =
         "none";
 
+
     }
+
 
 };
 
@@ -349,8 +471,11 @@ function(event){
 
 
 document.addEventListener(
+
 "keydown",
+
 function(event){
+
 
 
     if(lightbox.style.display !== "flex"){
@@ -360,32 +485,49 @@ function(event){
     }
 
 
+
     if(event.key === "ArrowRight"){
+
 
         showNext();
 
+
     }
+
 
 
     if(event.key === "ArrowLeft"){
 
+
         showPrevious();
 
+
     }
+
 
 
     if(event.key === "Escape"){
 
+
         lightbox.style.display =
         "none";
+
 
     }
 
 
-});
+}
+
+);
 
 
 
+
+
+
+/*
+SWIPE FUNKTION
+*/
 
 
 let touchStartX = 0;
@@ -393,20 +535,30 @@ let touchStartX = 0;
 
 
 lightbox.addEventListener(
+
 "touchstart",
+
 function(event){
+
 
     touchStartX =
     event.changedTouches[0].screenX;
 
-});
+
+}
+
+);
+
 
 
 
 
 lightbox.addEventListener(
+
 "touchend",
+
 function(event){
+
 
 
     let touchEndX =
@@ -416,7 +568,9 @@ function(event){
 
     if(touchEndX < touchStartX - 50){
 
+
         showNext();
+
 
     }
 
@@ -424,12 +578,17 @@ function(event){
 
     if(touchEndX > touchStartX + 50){
 
+
         showPrevious();
+
 
     }
 
 
-});
+
+}
+
+);
 
 
 
@@ -442,10 +601,15 @@ loadGallery();
 
 
 setInterval(
+
 function(){
+
 
     loadGallery();
 
+
 },
+
 20000
+
 );
