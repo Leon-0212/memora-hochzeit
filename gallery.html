@@ -3,95 +3,91 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Leon & Samira – Galerie</title>
 
-<title>
-Leon & Samira – Hochzeitsgalerie
-</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
-
-<link rel="stylesheet" href="gallery.css">
-
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
-
 <body>
-
 
 <div class="container">
 
+    <h1>Galerie</h1>
 
-<h1>
-Leon & Samira
-</h1>
+    <p class="subtitle">
+        Unsere gemeinsamen Erinnerungen ❤️
+    </p>
 
+    <div id="gallery" class="gallery">
 
-<p class="subtitle">
-Unsere gemeinsamen Erinnerungen
-</p>
+        <div class="loading">
+            Galerie wird geladen...
+        </div>
 
+    </div>
 
-<div id="gallery">
-
-</div>
-
-
-<a href="index.html" class="back">
-← Zur Startseite
-</a>
-
+    <a href="index.html" class="button">
+        ← Zurück zur Startseite
+    </a>
 
 </div>
 
 
 
-<!-- Vollbild -->
+<!-- ==========================
+     LIGHTBOX
+=========================== -->
 
-<div id="lightbox">
+<div id="lightbox" class="lightbox">
 
+    <span id="close" class="close">&times;</span>
 
-<span id="close">
-×
-</span>
+    <span id="prev" class="nav prev">&#10094;</span>
 
-
-<span id="prev">
-‹
-</span>
+    <span id="next" class="nav next">&#10095;</span>
 
 
-<img id="lightbox-image">
+    <!-- FOTO -->
+
+    <img
+        id="lightbox-image"
+        src=""
+        alt=""
+    >
 
 
-<span id="next">
-›
-</span>
+    <!-- VIDEO -->
+
+    <video
+        id="lightbox-video"
+        controls
+        playsinline
+        preload="metadata"
+    >
+        Dein Browser unterstützt keine Videos.
+    </video>
 
 
+    <div id="lightbox-uploader">
 
-<div id="lightbox-uploader">
-
-</div>
-
+    </div>
 
 </div>
 
 
 
 <script src="gallery.js"></script>
-
 
 </body>
 

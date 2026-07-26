@@ -9,7 +9,7 @@
 
 
 <title>
-Leon & Samira – Fotos hochladen
+Leon & Samira – Upload
 </title>
 
 
@@ -39,25 +39,30 @@ Fotos & Videos
 
 
 <p class="subtitle">
-Teilt eure schönsten Momente mit uns.
+Teilt eure schönsten Momente mit uns
 </p>
+
 
 
 
 <div class="upload-box">
 
 
-<label for="name">
-Dein Name (optional)
-</label>
-
 
 <input 
 type="text"
 id="name"
-placeholder="z.B. Anna"
+placeholder="Dein Name (optional)"
 >
 
+
+
+
+<label for="files" class="button">
+
+📁 Dateien auswählen
+
+</label>
 
 
 <input 
@@ -68,49 +73,67 @@ accept="image/*,video/*"
 >
 
 
-<label for="files" class="button">
-Fotos & Videos auswählen
-</label>
-
-
 
 <div id="file-list">
+
 Keine Dateien ausgewählt
+
 </div>
 
 
 
 <button id="upload-button">
+
 Hochladen
+
 </button>
+
 
 
 
 <div class="progress-container">
 
-<div id="progress"></div>
+
+<div id="progress">
+
+</div>
+
 
 </div>
 
 
 
-<p id="status"></p>
+
+<div id="status">
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+<a href="index.html" class="button">
+
+← Zurück
+
+</a>
+
 
 
 <a href="gallery.html" class="button">
-🖼 Zur Galerie
+
+🖼 Galerie ansehen
+
 </a>
 
-
-<a href="index.html" class="back">
-← Zur Startseite
-</a>
 
 
 </div>
 
-
-</div>
 
 
 

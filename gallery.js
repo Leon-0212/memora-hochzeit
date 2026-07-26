@@ -14,6 +14,10 @@ const lightboxImage =
 document.getElementById("lightbox-image");
 
 
+const lightboxVideo =
+document.getElementById("lightbox-video");
+
+
 const lightboxUploader =
 document.getElementById("lightbox-uploader");
 
@@ -30,9 +34,11 @@ const next =
 document.getElementById("next");
 
 
-let images = [];
+let media = [];
 
 let currentIndex = 0;
+
+
 
 
 
@@ -52,20 +58,15 @@ function uploaderText(item){
 
 async function loadGallery(){
 
-
-    try {
-
+    try{
 
         const response =
         await fetch(
             API_URL + "?action=list"
         );
 
-
         const data =
         await response.json();
-
-
 
         if(!data.success){
 
@@ -76,36 +77,20 @@ async function loadGallery(){
 
         }
 
+        media = data.gallery;
 
+        renderGallery();
 
-        const items =
-        data.gallery;
+    }
 
-
-
-        images =
-        items.filter(
-            item => !item.video
-        );
-
-
-
-        renderGallery(items);
-
-
-
-    } catch(error){
-
+    catch(error){
 
         console.error(error);
-
 
         gallery.innerHTML =
         "Galerie konnte nicht geladen werden.";
 
-
     }
-
 
 }
 
@@ -113,59 +98,39 @@ async function loadGallery(){
 
 
 
-function renderGallery(items){
-
+function renderGallery(){
 
     gallery.innerHTML = "";
 
-
-
-    items.forEach(item => {
-
-
+    media.forEach((item,index)=>{
 
         const card =
         document.createElement("div");
 
-
-
         card.className =
         "card";
-
-
 
         const uploader =
         uploaderText(item);
 
-
-
         if(item.video){
-
-
 
             card.innerHTML = `
 
-
-            <div class="video-card"
-            onclick="openVideo('${item.driveId}')">
-
-
+            <div class="video-card">
 
                 <img
                 class="video-thumbnail"
                 src="${item.thumbnail}"
                 >
 
-
-
                 <div class="play-button">
+
                     ▶
+
                 </div>
 
-
-
             </div>
-
 
             ${
                 uploader
@@ -175,28 +140,26 @@ function renderGallery(items){
                 ""
             }
 
-
             `;
 
+            card.onclick =
+            function(){
 
+                openLightbox(index);
+
+            };
 
         }
 
-
-
-        else {
-
-
+        else{
 
             card.innerHTML = `
-
 
             <img
             class="gallery-image"
             src="https://drive.google.com/thumbnail?id=${item.driveId}&sz=w1200"
             >
 
-
             ${
                 uploader
                 ?
@@ -205,67 +168,20 @@ function renderGallery(items){
                 ""
             }
 
-
             `;
 
-
-
-            const image =
-            card.querySelector(".gallery-image");
-
-
-
-            image.onclick = function(){
-
-
-
-                const index =
-                images.findIndex(
-                    img =>
-                    img.driveId === item.driveId
-                );
-
-
+            card.onclick =
+            function(){
 
                 openLightbox(index);
 
-
             };
-
-
 
         }
 
-
-
         gallery.appendChild(card);
 
-
-
     });
-
-
-}
-
-
-
-
-
-function openVideo(id){
-
-
-    window.open(
-
-        "https://drive.google.com/file/d/"
-        +
-        id
-        +
-        "/view",
-
-        "_blank"
-
-    );
-
 
 }
 
@@ -275,17 +191,13 @@ function openVideo(id){
 
 function openLightbox(index){
 
-
     currentIndex =
     index;
-
-
-    showImage();
-
 
     lightbox.style.display =
     "flex";
 
+    showMedia();
 
 }
 
@@ -293,66 +205,65 @@ function openLightbox(index){
 
 
 
-function showImage(){
-
+function showMedia(){
 
     const item =
-    images[currentIndex];
-
+    media[currentIndex];
 
     if(!item){
-
         return;
+    }
+
+    lightboxImage.style.display =
+    "none";
+
+    lightboxVideo.style.display =
+    "none";
+
+    lightboxVideo.pause();
+
+    if(item.video){
+
+        lightboxVideo.style.display =
+        "block";
+
+        lightboxVideo.src =
+        "https://drive.google.com/uc?export=download&id="
+        +
+        item.driveId;
 
     }
 
+    else{
 
+        lightboxImage.style.display =
+        "block";
 
-    lightboxImage.src =
-
-    "https://drive.google.com/thumbnail?id="
-    +
-    item.driveId
-    +
-    "&sz=w1600";
-
-
-
-    if(lightboxUploader){
-
-
-        const text =
-        uploaderText(item);
-
-
-        lightboxUploader.textContent =
-        text;
-
+        lightboxImage.src =
+        "https://drive.google.com/thumbnail?id="
+        +
+        item.driveId
+        +
+        "&sz=w1800";
 
     }
 
+    lightboxUploader.textContent =
+    uploaderText(item);
 
 }
-
-
-
-
 
 function showNext(){
 
-
     currentIndex++;
 
-
-    if(currentIndex >= images.length){
+    if(currentIndex >= media.length){
 
         currentIndex = 0;
 
     }
 
-
-    showImage();
-
+    showMedia();
 
 }
 
@@ -362,20 +273,16 @@ function showNext(){
 
 function showPrevious(){
 
-
     currentIndex--;
-
 
     if(currentIndex < 0){
 
         currentIndex =
-        images.length - 1;
+        media.length - 1;
 
     }
 
-
-    showImage();
-
+    showMedia();
 
 }
 
@@ -385,17 +292,19 @@ function showPrevious(){
 
 if(close){
 
-
     close.onclick =
     function(){
-
 
         lightbox.style.display =
         "none";
 
+        lightboxVideo.pause();
+
+        lightboxVideo.removeAttribute("src");
+
+        lightboxVideo.load();
 
     };
-
 
 }
 
@@ -405,19 +314,14 @@ if(close){
 
 if(next){
 
-
     next.onclick =
     function(event){
 
-
         event.stopPropagation();
-
 
         showNext();
 
-
     };
-
 
 }
 
@@ -427,19 +331,14 @@ if(next){
 
 if(prev){
 
-
     prev.onclick =
     function(event){
 
-
         event.stopPropagation();
-
 
         showPrevious();
 
-
     };
-
 
 }
 
@@ -450,16 +349,18 @@ if(prev){
 lightbox.onclick =
 function(event){
 
-
     if(event.target === lightbox){
-
 
         lightbox.style.display =
         "none";
 
+        lightboxVideo.pause();
+
+        lightboxVideo.removeAttribute("src");
+
+        lightboxVideo.load();
 
     }
-
 
 };
 
@@ -473,13 +374,11 @@ document.addEventListener(
 
 function(event){
 
-
     if(lightbox.style.display !== "flex"){
 
         return;
 
     }
-
 
     if(event.key === "ArrowRight"){
 
@@ -487,21 +386,24 @@ function(event){
 
     }
 
-
     if(event.key === "ArrowLeft"){
 
         showPrevious();
 
     }
 
-
     if(event.key === "Escape"){
 
         lightbox.style.display =
         "none";
 
-    }
+        lightboxVideo.pause();
 
+        lightboxVideo.removeAttribute("src");
+
+        lightboxVideo.load();
+
+    }
 
 }
 
@@ -515,16 +417,16 @@ let touchStartX = 0;
 
 
 
+
+
 lightbox.addEventListener(
 
 "touchstart",
 
 function(event){
 
-
     touchStartX =
     event.changedTouches[0].screenX;
-
 
 }
 
@@ -540,12 +442,8 @@ lightbox.addEventListener(
 
 function(event){
 
-
-
-    let touchEndX =
+    const touchEndX =
     event.changedTouches[0].screenX;
-
-
 
     if(touchEndX < touchStartX - 50){
 
@@ -553,15 +451,11 @@ function(event){
 
     }
 
-
-
     if(touchEndX > touchStartX + 50){
 
         showPrevious();
 
     }
-
-
 
 }
 
@@ -588,3 +482,4 @@ function(){
 20000
 
 );
+
