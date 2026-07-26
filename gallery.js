@@ -40,7 +40,6 @@ async function loadGallery(){
 
     try {
 
-
         const response =
         await fetch(
             API_URL + "?action=list"
@@ -49,7 +48,6 @@ async function loadGallery(){
 
         const data =
         await response.json();
-
 
 
         if(!data.success){
@@ -62,26 +60,24 @@ async function loadGallery(){
         }
 
 
-
         const items =
-        data.gallery.reverse();
-
+        data.gallery;
 
 
         images =
-        items.filter(item => !item.video);
+        items.filter(
+            item => !item.video
+        );
 
 
+        renderGallery(
+            items.reverse()
+        );
 
-        renderGallery(items);
 
-
-
-    } catch(error) {
-
+    } catch(error){
 
         console.error(error);
-
 
         gallery.innerHTML =
         "Galerie konnte nicht geladen werden.";
@@ -99,8 +95,7 @@ function renderGallery(items){
     gallery.innerHTML = "";
 
 
-
-    items.forEach((item)=>{
+    items.forEach(item => {
 
 
         const card =
@@ -117,22 +112,20 @@ function renderGallery(items){
 
             card.innerHTML = `
 
-            <video
-            controls
-            playsinline
-            preload="metadata">
+            <div class="video-card"
+            onclick="openVideo('${item.driveId}')">
 
-            <source src="https://drive.google.com/uc?export=download&id=${item.driveId}">
 
-            Dein Browser unterstützt dieses Video nicht.
+                <div class="play-button">
+                    ▶
+                </div>
 
-            </video>
+
+            </div>
 
 
             <div class="uploader">
-
             Hochgeladen von ${item.uploader || "Gast"}
-
             </div>
 
             `;
@@ -144,18 +137,15 @@ function renderGallery(items){
             card.innerHTML = `
 
             <img 
-            src="https://lh3.googleusercontent.com/d/${item.driveId}"
+            src="https://drive.google.com/thumbnail?id=${item.driveId}&sz=w1200"
             >
 
 
             <div class="uploader">
-
             Hochgeladen von ${item.uploader || "Gast"}
-
             </div>
 
             `;
-
 
 
             const image =
@@ -166,13 +156,16 @@ function renderGallery(items){
             image.onclick =
             function(){
 
+
                 const index =
                 images.findIndex(
-                    img => img.driveId === item.driveId
+                    img =>
+                    img.driveId === item.driveId
                 );
 
 
                 openLightbox(index);
+
 
             };
 
@@ -192,14 +185,25 @@ function renderGallery(items){
 
 
 
+function openVideo(id){
+
+
+    window.open(
+        "https://drive.google.com/file/d/"
+        +
+        id
+        +
+        "/view",
+        "_blank"
+    );
+
+
+}
+
+
+
+
 function openLightbox(index){
-
-
-    if(index < 0){
-
-        return;
-
-    }
 
 
     currentIndex =
@@ -232,11 +236,12 @@ function showImage(){
     }
 
 
-
     lightboxImage.src =
-    "https://lh3.googleusercontent.com/d/"
+    "https://drive.google.com/thumbnail?id="
     +
-    item.driveId;
+    item.driveId
+    +
+    "&sz=w1600";
 
 
 
@@ -266,7 +271,6 @@ function showNext(){
 
     showImage();
 
-
 }
 
 
@@ -288,9 +292,7 @@ function showPrevious(){
 
     showImage();
 
-
 }
-
 
 
 
@@ -358,7 +360,6 @@ function(event){
     }
 
 
-
     if(event.key === "ArrowRight"){
 
         showNext();
@@ -366,13 +367,11 @@ function(event){
     }
 
 
-
     if(event.key === "ArrowLeft"){
 
         showPrevious();
 
     }
-
 
 
     if(event.key === "Escape"){
@@ -401,7 +400,6 @@ function(event){
     event.changedTouches[0].screenX;
 
 });
-
 
 
 
