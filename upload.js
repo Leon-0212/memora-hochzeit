@@ -2,7 +2,6 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbxmKTqHSCzpHdvvtZF8vQPwZWNesUVblQLI38bEehXUEwSNTo8jQwwdC2YJd-wLZYhLbQ/exec";
 
 
-
 const filesInput =
 document.getElementById("files");
 
@@ -21,7 +20,6 @@ document.getElementById("progress");
 
 const status =
 document.getElementById("status");
-
 
 
 let selectedFiles = [];
@@ -44,13 +42,11 @@ function getUserId(){
     );
 
 
-
     if(!userId){
 
 
         userId =
         crypto.randomUUID();
-
 
 
         localStorage.setItem(
@@ -62,13 +58,10 @@ function getUserId(){
     }
 
 
-
     return userId;
 
 
 }
-
-
 
 
 
@@ -90,16 +83,12 @@ function(){
     );
 
 
-
     fileList.innerHTML =
-    selectedFiles.length
-    +
+    selectedFiles.length +
     " Datei(en) ausgewählt";
 
 
 });
-
-
 
 
 
@@ -145,12 +134,20 @@ async function(){
 
 
     uploadButton.innerHTML =
-    "Upload läuft...";
+    `
+    <span class="button-spinner"></span>
+    Upload läuft...
+    `;
 
 
 
     status.innerHTML =
     "";
+
+
+
+    progress.style.width =
+    "0%";
 
 
 
@@ -166,7 +163,9 @@ async function(){
 
 
 
-            await uploadFile(file);
+            await uploadFile(
+                file
+            );
 
 
 
@@ -184,7 +183,6 @@ async function(){
             "%";
 
 
-
         }
 
 
@@ -195,10 +193,15 @@ async function(){
 
 
 
-        filesInput.value = "";
+        filesInput.value =
+        "";
+
+
 
         fileList.innerHTML =
         "";
+
+
 
         selectedFiles = [];
 
@@ -222,30 +225,35 @@ async function(){
         "✕ Upload fehlgeschlagen";
 
 
-
     }
 
 
 
 
 
-    uploadButton.disabled = false;
+    setTimeout(
+        function(){
+
+            uploadButton.disabled =
+            false;
 
 
+            uploadButton.classList.remove(
+                "upload-active"
+            );
 
-    uploadButton.classList.remove(
-        "upload-active"
+
+            uploadButton.innerHTML =
+            "Hochladen";
+
+
+        },
+        1500
     );
 
 
 
-    uploadButton.innerHTML =
-    "Hochladen";
-
-
-
 });
-
 
 
 
@@ -358,6 +366,18 @@ return new Promise(
 
 
 
+                if(!result.success){
+
+                    reject(
+                        result.message
+                    );
+
+                    return;
+
+                }
+
+
+
                 resolve();
 
 
@@ -372,17 +392,9 @@ return new Promise(
             error => {
 
 
-
-                console.error(
-                    error
-                );
-
-
-
                 reject(
                     error
                 );
-
 
 
             }
