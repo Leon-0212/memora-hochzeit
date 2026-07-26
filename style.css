@@ -112,6 +112,66 @@ button:hover {
 }
 
 
+/*
+UPLOAD BUTTON ACTIVE STATE
+*/
+
+.upload-active {
+
+    background: var(--cream);
+
+    color: var(--text);
+
+    cursor: wait;
+
+    opacity: 1;
+
+}
+
+
+
+/*
+SPINNER
+*/
+
+.spinner {
+
+    width: 32px;
+
+    height: 32px;
+
+    border: 4px solid #eee;
+
+    border-top: 4px solid var(--taupe);
+
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
+
+    margin: 20px auto;
+
+}
+
+
+
+@keyframes spin {
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+
 #file-list {
 
     margin-top: 20px;
@@ -160,6 +220,7 @@ button:hover {
     font-weight: 700;
 
 }
+
 
 #name {
 
