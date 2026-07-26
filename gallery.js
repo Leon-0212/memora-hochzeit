@@ -30,10 +30,23 @@ const next =
 document.getElementById("next");
 
 
-
 let images = [];
 
 let currentIndex = 0;
+
+
+
+function uploaderText(item){
+
+    if(!item.uploader || item.uploader === "Gast"){
+        return "";
+    }
+
+    return "📷 " + item.uploader;
+
+}
+
+
 
 
 
@@ -77,9 +90,7 @@ async function loadGallery(){
 
 
 
-        renderGallery(
-            items
-        );
+        renderGallery(items);
 
 
 
@@ -123,9 +134,9 @@ function renderGallery(items){
 
 
 
-        /*
-        VIDEO
-        */
+        const uploader =
+        uploaderText(item);
+
 
 
         if(item.video){
@@ -142,7 +153,7 @@ function renderGallery(items){
 
                 <img
                 class="video-thumbnail"
-                src="${item.thumbnail || ''}"
+                src="${item.thumbnail}"
                 >
 
 
@@ -156,12 +167,13 @@ function renderGallery(items){
             </div>
 
 
-
-            <div class="uploader">
-
-            Hochgeladen von ${item.uploader || "Gast"}
-
-            </div>
+            ${
+                uploader
+                ?
+                `<div class="uploader">${uploader}</div>`
+                :
+                ""
+            }
 
 
             `;
@@ -170,11 +182,6 @@ function renderGallery(items){
 
         }
 
-
-
-        /*
-        BILDER
-        */
 
 
         else {
@@ -190,12 +197,13 @@ function renderGallery(items){
             >
 
 
-
-            <div class="uploader">
-
-            Hochgeladen von ${item.uploader || "Gast"}
-
-            </div>
+            ${
+                uploader
+                ?
+                `<div class="uploader">${uploader}</div>`
+                :
+                ""
+            }
 
 
             `;
@@ -246,7 +254,6 @@ function renderGallery(items){
 function openVideo(id){
 
 
-
     window.open(
 
         "https://drive.google.com/file/d/"
@@ -269,14 +276,11 @@ function openVideo(id){
 function openLightbox(index){
 
 
-
     currentIndex =
     index;
 
 
-
     showImage();
-
 
 
     lightbox.style.display =
@@ -292,10 +296,8 @@ function openLightbox(index){
 function showImage(){
 
 
-
     const item =
     images[currentIndex];
-
 
 
     if(!item){
@@ -318,11 +320,14 @@ function showImage(){
 
     if(lightboxUploader){
 
-        lightboxUploader.textContent =
 
-        "Hochgeladen von "
-        +
-        (item.uploader || "Gast");
+        const text =
+        uploaderText(item);
+
+
+        lightboxUploader.textContent =
+        text;
+
 
     }
 
@@ -336,9 +341,7 @@ function showImage(){
 function showNext(){
 
 
-
     currentIndex++;
-
 
 
     if(currentIndex >= images.length){
@@ -348,9 +351,7 @@ function showNext(){
     }
 
 
-
     showImage();
-
 
 
 }
@@ -362,9 +363,7 @@ function showNext(){
 function showPrevious(){
 
 
-
     currentIndex--;
-
 
 
     if(currentIndex < 0){
@@ -375,9 +374,7 @@ function showPrevious(){
     }
 
 
-
     showImage();
-
 
 
 }
@@ -477,7 +474,6 @@ document.addEventListener(
 function(event){
 
 
-
     if(lightbox.style.display !== "flex"){
 
         return;
@@ -485,33 +481,24 @@ function(event){
     }
 
 
-
     if(event.key === "ArrowRight"){
-
 
         showNext();
 
-
     }
-
 
 
     if(event.key === "ArrowLeft"){
 
-
         showPrevious();
-
 
     }
 
 
-
     if(event.key === "Escape"){
-
 
         lightbox.style.display =
         "none";
-
 
     }
 
@@ -522,12 +509,6 @@ function(event){
 
 
 
-
-
-
-/*
-SWIPE FUNKTION
-*/
 
 
 let touchStartX = 0;
@@ -568,9 +549,7 @@ function(event){
 
     if(touchEndX < touchStartX - 50){
 
-
         showNext();
-
 
     }
 
@@ -578,9 +557,7 @@ function(event){
 
     if(touchEndX > touchStartX + 50){
 
-
         showPrevious();
-
 
     }
 
@@ -604,9 +581,7 @@ setInterval(
 
 function(){
 
-
     loadGallery();
-
 
 },
 
