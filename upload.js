@@ -30,18 +30,70 @@ let selectedFiles = [];
 
 
 
+/*******************************************************
+ * USER ID
+ *******************************************************/
+
+
+function getUserId(){
+
+
+    let userId =
+    localStorage.getItem(
+        "memora_user_id"
+    );
+
+
+
+    if(!userId){
+
+
+        userId =
+        crypto.randomUUID();
+
+
+
+        localStorage.setItem(
+            "memora_user_id",
+            userId
+        );
+
+
+    }
+
+
+
+    return userId;
+
+
+}
+
+
+
+
+
+
+
+/*******************************************************
+ * FILE SELECTION
+ *******************************************************/
+
+
 filesInput.addEventListener(
 "change",
 function(){
 
 
     selectedFiles =
-    Array.from(filesInput.files);
+    Array.from(
+        filesInput.files
+    );
 
 
 
     fileList.innerHTML =
-    selectedFiles.length +
+    selectedFiles.length
+    +
     " Datei(en) ausgewählt";
 
 
@@ -51,6 +103,13 @@ function(){
 
 
 
+
+
+
+
+/*******************************************************
+ * UPLOAD BUTTON
+ *******************************************************/
 
 
 uploadButton.addEventListener(
@@ -63,7 +122,7 @@ async function(){
 
 
         alert(
-        "Bitte zuerst Dateien auswählen."
+            "Bitte zuerst Dateien auswählen."
         );
 
 
@@ -117,14 +176,17 @@ async function(){
 
             progress.style.width =
             (
-                (finished / selectedFiles.length)
-                * 100
+                finished /
+                selectedFiles.length *
+                100
             )
-            + "%";
+            +
+            "%";
 
 
 
         }
+
 
 
 
@@ -133,14 +195,26 @@ async function(){
 
 
 
+        filesInput.value = "";
+
+        fileList.innerHTML =
+        "";
+
+        selectedFiles = [];
+
+
+
     }
+
 
 
     catch(error){
 
 
 
-        console.error(error);
+        console.error(
+            error
+        );
 
 
 
@@ -180,6 +254,11 @@ async function(){
 
 
 
+/*******************************************************
+ * UPLOAD FILE
+ *******************************************************/
+
+
 function uploadFile(file){
 
 
@@ -204,23 +283,33 @@ return new Promise(
         const payload = {
 
 
+
             file:
             reader.result,
+
 
 
             filename:
             file.name,
 
 
+
             mime:
             file.type,
+
 
 
             uploader:
 
             document.getElementById("name").value
             ||
-            "Gast"
+            "Gast",
+
+
+
+            userId:
+
+            getUserId()
 
 
 
@@ -230,65 +319,75 @@ return new Promise(
 
 
 
+
+
         fetch(
-        API_URL,
-        {
+            API_URL,
+            {
 
-            method:"POST",
-
-            body:
-            JSON.stringify(payload)
-
-        })
+                method:
+                "POST",
 
 
+                body:
+                JSON.stringify(payload)
 
-        .then(
-        response =>
-        response.json()
+
+            }
+
         )
 
 
 
         .then(
-        result => {
-
-
-            console.log(
-                "Upload Antwort:",
-                result
-            );
+            response =>
+            response.json()
+        )
 
 
 
-            /*
-            Google Apps Script hat geantwortet,
-            Upload gilt als erfolgreich
-            */
-
-
-            resolve();
+        .then(
+            result => {
 
 
 
-        })
+                console.log(
+                    "Upload Antwort:",
+                    result
+                );
+
+
+
+                resolve();
+
+
+
+            }
+
+        )
 
 
 
         .catch(
-        error => {
+            error => {
 
 
-            console.error(
-                "Upload Fehler:",
-                error
-            );
+
+                console.error(
+                    error
+                );
 
 
-            reject(error);
+
+                reject(
+                    error
+                );
 
 
-        });
+
+            }
+
+        );
 
 
 
@@ -299,11 +398,14 @@ return new Promise(
 
 
 
+
     reader.onerror =
     function(error){
 
 
-        reject(error);
+        reject(
+            error
+        );
 
 
     };
