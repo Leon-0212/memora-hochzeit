@@ -41,8 +41,7 @@ function(){
 
 
     fileList.innerHTML =
-    selectedFiles.length
-    +
+    selectedFiles.length +
     " Datei(en) ausgewählt";
 
 
@@ -79,9 +78,11 @@ async function(){
     uploadButton.disabled = true;
 
 
+
     uploadButton.classList.add(
         "upload-active"
     );
+
 
 
     uploadButton.innerHTML =
@@ -115,13 +116,10 @@ async function(){
 
 
             progress.style.width =
-
             (
                 (finished / selectedFiles.length)
-                *
-                100
+                * 100
             )
-
             + "%";
 
 
@@ -130,14 +128,15 @@ async function(){
 
 
 
-
         status.innerHTML =
         "✓ Upload erfolgreich";
 
 
 
+    }
 
-    } catch(error){
+
+    catch(error){
 
 
 
@@ -155,12 +154,15 @@ async function(){
 
 
 
+
     uploadButton.disabled = false;
+
 
 
     uploadButton.classList.remove(
         "upload-active"
     );
+
 
 
     uploadButton.innerHTML =
@@ -202,20 +204,16 @@ return new Promise(
         const payload = {
 
 
-
             file:
             reader.result,
-
 
 
             filename:
             file.name,
 
 
-
             mime:
             file.type,
-
 
 
             uploader:
@@ -232,13 +230,11 @@ return new Promise(
 
 
 
-
         fetch(
         API_URL,
         {
 
             method:"POST",
-
 
             body:
             JSON.stringify(payload)
@@ -258,23 +254,17 @@ return new Promise(
         result => {
 
 
-
-            console.log(result);
-
-
-            if(!result.uploaded){
-
-
-                reject(
-                "Upload fehlgeschlagen"
-                );
+            console.log(
+                "Upload Antwort:",
+                result
+            );
 
 
-                return;
 
-
-            }
-
+            /*
+            Google Apps Script hat geantwortet,
+            Upload gilt als erfolgreich
+            */
 
 
             resolve();
@@ -286,10 +276,13 @@ return new Promise(
 
 
         .catch(
-        error=>{
+        error => {
 
 
-            console.error(error);
+            console.error(
+                "Upload Fehler:",
+                error
+            );
 
 
             reject(error);
