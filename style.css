@@ -1,0 +1,180 @@
+:root {
+    --cream: #EEE1C8;
+    --taupe: #918775;
+    --text: #3A342E;
+    --white: #ffffff;
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--cream);
+
+    font-family: "Lato", sans-serif;
+
+    color: var(--text);
+}
+
+
+.container {
+
+    width: 90%;
+    max-width: 500px;
+
+    text-align: center;
+
+}
+
+
+h1 {
+
+    font-size: 42px;
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+}
+
+
+.subtitle {
+
+    font-size: 20px;
+    font-weight: 300;
+
+    margin-bottom: 40px;
+
+}
+
+
+.upload-box {
+
+    background: var(--white);
+
+    padding: 35px;
+
+    border-radius: 20px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+
+input[type="file"] {
+
+    display: none;
+
+}
+
+
+.button,
+button {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 16px;
+
+    margin-top: 15px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: var(--taupe);
+
+    color: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+}
+
+
+.button:hover,
+button:hover {
+
+    opacity: 0.9;
+
+}
+
+
+#file-list {
+
+    margin-top: 20px;
+
+    font-size: 14px;
+
+    color: #777;
+
+}
+
+
+.progress-container {
+
+    margin-top: 25px;
+
+    width: 100%;
+
+    height: 8px;
+
+    background: #eee;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+}
+
+
+#progress {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: var(--taupe);
+
+    transition: .3s;
+
+}
+
+
+#status {
+
+    margin-top: 20px;
+
+    font-weight: 700;
+
+}
+
+#name {
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:15px;
+
+    border-radius:12px;
+
+    border:1px solid #ddd;
+
+    font-family:"Lato", sans-serif;
+
+    font-size:16px;
+
+}
